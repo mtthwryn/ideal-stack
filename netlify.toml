@@ -1,2 +1,2 @@
 [build]
-  command = 'pnpm build'
+  command = "pnpm tinacms build && pnpm build"
