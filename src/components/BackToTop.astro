@@ -1,0 +1,78 @@
+---
+
+---
+
+<button
+	id='back-to-top'
+	aria-label='Back to top'
+	class='fixed bottom-8 right-8 z-50 p-4 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:scale-110'
+>
+	<svg
+		class='w-5 h-5'
+		fill='none'
+		stroke='currentColor'
+		stroke-width='2.5'
+		stroke-linecap='round'
+		stroke-linejoin='round'
+		viewBox='0 0 24 24'
+	>
+		<line x1='12' y1='19' x2='12' y2='5'></line>
+		<polyline points='5 12 12 5 19 12'></polyline>
+	</svg>
+</button>
+
+<script>
+	function initBackToTop() {
+		const backToTopButton = document.getElementById('back-to-top')
+
+		if (!backToTopButton) return
+
+		// Show/hide button based on scroll position
+		const toggleButton = () => {
+			if (window.scrollY > 300) {
+				backToTopButton.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4')
+				backToTopButton.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0')
+			} else {
+				backToTopButton.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4')
+				backToTopButton.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0')
+			}
+		}
+
+		// Smooth scroll to top
+		backToTopButton.addEventListener('click', () => {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			})
+		})
+
+		// Throttle scroll events for better performance
+		let ticking = false
+		const handleScroll = () => {
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					toggleButton()
+					ticking = false
+				})
+				ticking = true
+			}
+		}
+
+		// Listen for scroll events
+		window.addEventListener('scroll', handleScroll, { passive: true })
+
+		// Check initial state
+		toggleButton()
+	}
+
+	// Initialize on DOM ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initBackToTop)
+	} else {
+		initBackToTop()
+	}
+
+	// Re-initialize on Astro view transitions
+	document.addEventListener('astro:after-swap', initBackToTop)
+	document.addEventListener('astro:page-load', initBackToTop)
+</script>
