@@ -1,0 +1,98 @@
+---
+
+---
+
+<div
+	id='reading-progress-container'
+	class='fixed top-0 left-0 w-full h-1 bg-stone-200 dark:bg-stone-800 z-50 opacity-0 transition-opacity duration-300'
+>
+	<div
+		id='reading-progress-bar'
+		class='h-full bg-gradient-to-r from-stone-600 to-stone-800 dark:from-stone-400 dark:to-stone-600 transition-all duration-150 ease-out'
+		style='width: 0%'
+	>
+	</div>
+</div>
+
+<script>
+	function updateReadingProgress() {
+		const container = document.getElementById('reading-progress-container')
+		const progressBar = document.getElementById('reading-progress-bar')
+		const article = document.querySelector('article')
+
+		if (!container || !progressBar || !article) return
+
+		const articleTop = article.offsetTop
+		const articleHeight = article.offsetHeight
+		const windowHeight = window.innerHeight
+		const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+		// Calculate article boundaries
+		const articleBottom = articleTop + articleHeight
+		const viewportTop = scrollTop
+		const viewportBottom = scrollTop + windowHeight
+
+		// Calculate progress: how much of the article has been scrolled through
+		let progress = 0
+
+		// Only calculate progress when article is in view
+		if (viewportBottom > articleTop && viewportTop < articleBottom) {
+			// Calculate how much of the article has been scrolled past
+			const scrolledPastTop = Math.max(0, viewportTop - articleTop)
+			const totalScrollable = Math.max(1, articleHeight - windowHeight)
+
+			// Progress is based on how much we've scrolled through the article
+			progress = Math.min(100, (scrolledPastTop / totalScrollable) * 100)
+		} else if (viewportTop >= articleBottom) {
+			// Article has been completely scrolled past
+			progress = 100
+		}
+
+		// Show progress bar when article is in view or has been scrolled past
+		if (viewportBottom > articleTop && viewportTop < articleBottom) {
+			container.classList.remove('opacity-0')
+			container.classList.add('opacity-100')
+			progressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`
+		} else if (viewportTop >= articleBottom) {
+			// Article has been completely scrolled past
+			container.classList.remove('opacity-0')
+			container.classList.add('opacity-100')
+			progressBar.style.width = '100%'
+		} else {
+			// Article not in view yet
+			container.classList.remove('opacity-100')
+			container.classList.add('opacity-0')
+			progressBar.style.width = '0%'
+		}
+	}
+
+	function initReadingProgress() {
+		updateReadingProgress()
+
+		// Throttle scroll events for better performance
+		let ticking = false
+		const handleScroll = () => {
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					updateReadingProgress()
+					ticking = false
+				})
+				ticking = true
+			}
+		}
+
+		window.addEventListener('scroll', handleScroll, { passive: true })
+		window.addEventListener('resize', handleScroll, { passive: true })
+	}
+
+	// Initialize on page load
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initReadingProgress)
+	} else {
+		initReadingProgress()
+	}
+
+	// Re-initialize on Astro navigation
+	document.addEventListener('astro:after-swap', initReadingProgress)
+	document.addEventListener('astro:page-load', initReadingProgress)
+</script>
