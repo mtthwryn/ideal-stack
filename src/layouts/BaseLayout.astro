@@ -7,12 +7,21 @@ import ProviderAnimations from '@/components/ProviderAnimations'
 import TwSizeIndicator from '@/components/TwSizeIndicator'
 import EditBlog from '@/components/editBlog'
 import BackToTop from '@/components/BackToTop'
-const { title, description, image, articleDate } = Astro.props
+const { title, description, image, articleDate, articleTitle, articleAuthor, articleTags } =
+	Astro.props
 ---
 
 <html lang='en' class='scroll-smooth'>
 	<head>
-		<BaseHead title={title} description={description} ogImage={image} articleDate={articleDate} />
+		<BaseHead
+			title={title}
+			description={description}
+			ogImage={image}
+			articleDate={articleDate}
+			articleTitle={articleTitle}
+			articleAuthor={articleAuthor}
+			articleTags={articleTags}
+		/>
 		<ProviderTheme />
 		<ProviderAnimations />
 	</head>

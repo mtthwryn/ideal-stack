@@ -5,6 +5,7 @@ import BaseLayout from '@/layouts/BaseLayout'
 import Tag from '@/components/Tag'
 import type { MarkdownHeading } from 'astro'
 import { Image } from 'astro:assets'
+import { siteConfig } from '@/site-config'
 
 type Props = {
 	id: CollectionEntry<'blog'>['id']
@@ -24,6 +25,9 @@ const articleDate = pubDate.toISOString()
 	description={description}
 	image={heroImage?.src}
 	articleDate={articleDate}
+	articleTitle={title}
+	articleAuthor={siteConfig.author}
+	articleTags={tags}
 >
 	<article class='min-w-full md:py-4 sm:max-w-none md:max-w-none'>
 		<header class='mb-3 flex flex-col justify-center items-center gap-6'>

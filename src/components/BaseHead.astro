@@ -8,15 +8,80 @@ export interface Props {
 	description?: string
 	ogImage?: string | undefined
 	articleDate?: string | undefined
+	articleTitle?: string | undefined
+	articleAuthor?: string | undefined
+	articleTags?: string[] | undefined
 }
 
-const { title, description = siteConfig.description, ogImage, articleDate } = Astro.props
+const {
+	title,
+	description = siteConfig.description,
+	ogImage,
+	articleDate,
+	articleTitle,
+	articleAuthor,
+	articleTags
+} = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : '/open-graph.png', Astro.url).href
 
 const titleSeparator = '•'
 
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`
+
+// Schema.org structured data
+const organizationSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: siteConfig.title,
+	url: siteConfig.site,
+	description: siteConfig.description,
+	author: {
+		'@type': 'Person',
+		name: siteConfig.author
+	}
+}
+
+const articleSchema = articleDate
+	? {
+			'@context': 'https://schema.org',
+			'@type': 'Article',
+			headline: articleTitle || title,
+			description: description,
+			image: socialImageURL,
+			datePublished: articleDate,
+			dateModified: articleDate,
+			author: {
+				'@type': 'Person',
+				name: articleAuthor || siteConfig.author
+			},
+			publisher: {
+				'@type': 'Organization',
+				name: siteConfig.title,
+				url: siteConfig.site
+			},
+			mainEntityOfPage: {
+				'@type': 'WebPage',
+				'@id': canonicalURL.toString()
+			},
+			...(articleTags &&
+				articleTags.length > 0 && {
+					keywords: articleTags.join(', ')
+				})
+		}
+	: null
+
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: siteConfig.title,
+	url: siteConfig.site,
+	description: siteConfig.description,
+	author: {
+		'@type': 'Person',
+		name: siteConfig.author
+	}
+}
 
 import { join } from 'path'
 import { AstroFont } from 'astro-font'
@@ -66,6 +131,11 @@ import { AstroFont } from 'astro-font'
 
 <!-- RSS auto-discovery -->
 <link rel='alternate' type='application/rss+xml' title={siteConfig.title} href='/rss.xml' />
+
+<!-- Schema.org Structured Data -->
+<script type='application/ld+json' set:html={JSON.stringify(organizationSchema)} />
+{articleSchema && <script type='application/ld+json' set:html={JSON.stringify(articleSchema)} />}
+{!articleDate && <script type='application/ld+json' set:html={JSON.stringify(websiteSchema)} />}
 
 <AstroFont
 	config={[
