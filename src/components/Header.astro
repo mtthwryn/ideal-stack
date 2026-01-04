@@ -1,6 +1,7 @@
 ---
 import HeaderLink from '@/components/HeaderLink'
 import MenuIcon from './icons/MenuIcon.astro'
+import CloseIcon from './icons/CloseIcon.astro'
 import Search from '@/components/Search'
 import TagIcon from './icons/TagIcon.astro'
 import ToggleTheme from './ToggleTheme.astro'
@@ -13,35 +14,71 @@ import { SOCIALNETWORKS } from '@/data/links'
 		href='/'>ideal-stack</a
 	>
 
+	<!-- Mobile Menu Backdrop -->
+	<div
+		id='astro-header-backdrop'
+		class='fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden opacity-0 pointer-events-none transition-opacity duration-300'
+	>
+	</div>
+
+	<!-- Mobile Menu -->
 	<div
 		id='astro-header-drawer'
-		class='shadow rounded-l-lg md:bg-transparent dark:md:bg-transparent bg-white dark:bg-[#0a0910] md:shadow-none md:rounded-none md:border-none md:h-auto md:static absolute transition-transform duration-300 ease-in translate-x-96 md:translate-x-0 top-12 -right-5 pl-4 pt-6 pb-4 md:p-0 h-[240px] w-[200px] md:w-auto md:flex-shrink z-50 overflow-hidden'
+		class='fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-[#0a0910] shadow-2xl z-50 md:bg-transparent md:dark:bg-transparent md:shadow-none md:rounded-none md:border-none md:h-auto md:static md:w-auto md:flex-shrink transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto'
 	>
+		<!-- Mobile Menu Header -->
+		<div
+			class='flex items-center justify-between p-6 border-b border-stone-200 dark:border-stone-800 md:hidden'
+		>
+			<span class='text-xl font-bold text-stone-900 dark:text-white'>Menu</span>
+			<button
+				id='astro-header-close-button'
+				type='button'
+				class='p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors'
+				aria-label='Close menu'
+			>
+				<CloseIcon />
+			</button>
+		</div>
+
 		<nav
-			class='flex h-full flex-col justify-between gap-8 text-left md:flex-row md:items-center md:gap-3'
+			class='flex h-full flex-col gap-8 p-6 md:p-0 text-left md:flex-row md:items-center md:gap-3 md:h-auto'
 		>
 			<div
-				class='flex flex-col gap-4 md:flex-row md:border-r-2 border-black md:pr-3 dark:border-white md:gap-3'
+				class='flex flex-col gap-6 md:flex-row md:border-r-2 border-black md:pr-3 dark:border-white md:gap-3'
 			>
-				<HeaderLink href='/about' class='flex items-center gap-1 text-2xl md:text-base'>
+				<HeaderLink href='/about' class='flex items-center gap-2 text-xl md:text-base py-2 md:py-0'>
 					About
 				</HeaderLink>
-				<HeaderLink href='/projects' class='flex items-center gap-1 text-2xl md:text-base'>
+				<HeaderLink
+					href='/projects'
+					class='flex items-center gap-2 text-xl md:text-base py-2 md:py-0'
+				>
 					Projects
 				</HeaderLink>
-				<HeaderLink href='/tags' class='flex items-center gap-1 text-2xl md:text-base'>
+				<HeaderLink href='/tags' class='flex items-center gap-2 text-xl md:text-base py-2 md:py-0'>
 					<TagIcon /> Tags
 				</HeaderLink>
 			</div>
 
-			<div class='flex justify-center items-center gap-3 md:justify-end md:p-0'>
-				{
-					SOCIALNETWORKS.map((network) => (
-						<HeaderLink class='' href={network.url} target='_blank' aria-label={network.name}>
-							<span>{<network.icon />} </span>
-						</HeaderLink>
-					))
-				}
+			<div
+				class='flex flex-col gap-4 pt-6 border-t border-stone-200 dark:border-stone-800 md:border-t-0 md:flex-row md:justify-center md:items-center md:gap-3 md:pt-0 md:p-0'
+			>
+				<span class='text-sm font-medium text-stone-500 dark:text-stone-400 md:hidden'>Social</span>
+				<div class='flex gap-4 md:gap-3'>
+					{
+						SOCIALNETWORKS.map((network) => (
+							<HeaderLink
+								class='p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors'
+								href={network.url}
+								target='_blank'
+								aria-label={network.name}
+							>
+								<span class='text-2xl md:text-base'>{<network.icon />} </span>
+							</HeaderLink>
+						))
+					}
+				</div>
 			</div>
 		</nav>
 	</div>
@@ -51,24 +88,92 @@ import { SOCIALNETWORKS } from '@/data/links'
 			<Search />
 		</div>
 		<ToggleTheme />
-		<button id='astro-header-drawer-button' type='button' class='md:ml-6 md:hidden'>
+		<button
+			id='astro-header-drawer-button'
+			type='button'
+			class='md:ml-6 md:hidden p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors'
+			aria-label='Open menu'
+		>
 			<MenuIcon />
 			<span class='sr-only'>Show Menu</span>
 		</button>
 	</div>
 </header>
 <script>
-	document.addEventListener('click', (event) => {
+	function openMenu() {
 		const menu = document.getElementById('astro-header-drawer')
-		const menuButton = document.getElementById('astro-header-drawer-button')
-		const isClickInside =
-			menu?.contains(event.target as HTMLDivElement) ||
-			menuButton?.contains(event.target as HTMLButtonElement)
+		const backdrop = document.getElementById('astro-header-backdrop')
+		const body = document.body
 
-		if (isClickInside) {
-			menu?.classList.toggle('translate-x-96')
-		} else {
-			menu?.classList.add('translate-x-96')
+		if (menu && backdrop) {
+			menu.classList.remove('translate-x-full')
+			backdrop.classList.remove('opacity-0', 'pointer-events-none')
+			backdrop.classList.add('opacity-100', 'pointer-events-auto')
+			body.style.overflow = 'hidden'
 		}
+	}
+
+	function closeMenu() {
+		const menu = document.getElementById('astro-header-drawer')
+		const backdrop = document.getElementById('astro-header-backdrop')
+		const body = document.body
+
+		if (menu && backdrop) {
+			menu.classList.add('translate-x-full')
+			backdrop.classList.remove('opacity-100', 'pointer-events-auto')
+			backdrop.classList.add('opacity-0', 'pointer-events-none')
+			body.style.overflow = ''
+		}
+	}
+
+	function toggleMenu() {
+		const menu = document.getElementById('astro-header-drawer')
+		if (menu?.classList.contains('translate-x-full')) {
+			openMenu()
+		} else {
+			closeMenu()
+		}
+	}
+
+	// Menu button
+	const menuButton = document.getElementById('astro-header-drawer-button')
+	menuButton?.addEventListener('click', (e) => {
+		e.stopPropagation()
+		toggleMenu()
+	})
+
+	// Close button
+	const closeButton = document.getElementById('astro-header-close-button')
+	closeButton?.addEventListener('click', (e) => {
+		e.stopPropagation()
+		closeMenu()
+	})
+
+	// Close on backdrop click
+	const backdrop = document.getElementById('astro-header-backdrop')
+	backdrop?.addEventListener('click', () => {
+		closeMenu()
+	})
+
+	// Close on escape key
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') {
+			closeMenu()
+		}
+	})
+
+	// Close menu when clicking on a link (mobile only)
+	const menuLinks = document.querySelectorAll('#astro-header-drawer a')
+	menuLinks.forEach((link) => {
+		link.addEventListener('click', () => {
+			if (window.innerWidth < 768) {
+				closeMenu()
+			}
+		})
+	})
+
+	// Re-initialize on Astro navigation
+	document.addEventListener('astro:after-swap', () => {
+		closeMenu()
 	})
 </script>
