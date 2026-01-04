@@ -137,6 +137,34 @@ import { AstroFont } from 'astro-font'
 {articleSchema && <script type='application/ld+json' set:html={JSON.stringify(articleSchema)} />}
 {!articleDate && <script type='application/ld+json' set:html={JSON.stringify(websiteSchema)} />}
 
+<!-- Google tag (gtag.js) -->
+{
+	siteConfig.googleAnalyticsId && (
+		<>
+			<script
+				async
+				src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}
+			/>
+			<script
+				is:inline
+				set:html={`
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', '${siteConfig.googleAnalyticsId}');
+				
+				// Track page views for Astro view transitions
+				document.addEventListener('astro:page-load', () => {
+					gtag('config', '${siteConfig.googleAnalyticsId}', {
+						page_path: window.location.pathname
+					});
+				});
+			`}
+			/>
+		</>
+	)
+}
+
 <AstroFont
 	config={[
 		{
