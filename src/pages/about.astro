@@ -1,0 +1,28 @@
+---
+import TitlePage from '@/components/TitlePage'
+import BaseLayout from '@/layouts/BaseLayout'
+import { siteConfig } from '@/site-config'
+---
+
+<BaseLayout title='About' description={`About ${siteConfig.author}`}>
+	<TitlePage title='About' />
+
+	<div class='prose prose-stone dark:prose-invert max-w-none'>
+		<section class='space-y-6'>
+			<p class='text-lg leading-relaxed'>
+				Welcome to my blog! I'm {siteConfig.author}, and I'm passionate about sharing knowledge,
+				experiences, and insights through writing.
+			</p>
+
+			<p class='text-lg leading-relaxed'>
+				This blog covers topics ranging from web development and technology to personal experiences
+				and thoughts. I hope you find the content here useful and engaging.
+			</p>
+
+			<p class='text-lg leading-relaxed'>
+				Feel free to explore the posts, browse by categories or tags, and reach out if you'd like to
+				connect!
+			</p>
+		</section>
+	</div>
+</BaseLayout>
