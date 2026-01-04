@@ -12,7 +12,7 @@ interface SiteConfig {
 export const siteConfig: SiteConfig = {
 	site: 'https://ideal-stack.netlify.app/', // Write here your website url
 	author: 'ideal-stack', // Site author
-	title: 'ideal-stack', // Site title.
+	title: 'Dev Blog', // Site title.
 	description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // Description to display in the meta tags
 	lang: 'en-GB',
 	ogLocale: 'en_GB',

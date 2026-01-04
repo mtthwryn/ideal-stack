@@ -25,7 +25,7 @@
 						"name": "category",
 						"label": "Category",
 						"description": "Select an category for this post",
-						"options": ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5"],
+						"options": ["Frontend", "Backend", "DevOps", "QA + Test", "Category 5"],
 						"namespace": ["post", "category"],
 						"searchable": true,
 						"uid": false
