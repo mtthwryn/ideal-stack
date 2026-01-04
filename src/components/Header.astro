@@ -8,10 +8,10 @@ import { SOCIALNETWORKS } from '@/data/links'
 ---
 
 <header class='relative flex items-center h-12 font-semibold'>
-	<div class='flex items-center gap-4 mr-auto'>
-		<a class='text-lg' href='/about'>About</a>
-		<a class='text-lg' href='/'>Home</a>
-	</div>
+	<a
+		class='text-2xl md:text-3xl font-extrabold tracking-tight hover:opacity-80 transition-opacity mr-auto'
+		href='/'>ideal-stack</a
+	>
 
 	<div
 		id='astro-header-drawer'
@@ -23,6 +23,9 @@ import { SOCIALNETWORKS } from '@/data/links'
 			<div
 				class='flex flex-col gap-4 md:flex-row md:border-r-2 border-black pr-4 dark:border-white'
 			>
+				<HeaderLink href='/about' class='flex items-center gap-1 text-2xl md:text-base'>
+					About
+				</HeaderLink>
 				<HeaderLink href='/tags' class='flex items-center gap-1 text-2xl md:text-base'>
 					<TagIcon /> Tags
 				</HeaderLink>
