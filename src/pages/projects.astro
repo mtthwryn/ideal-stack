@@ -1,0 +1,23 @@
+---
+import TitlePage from '@/components/TitlePage'
+import BaseLayout from '@/layouts/BaseLayout'
+import { siteConfig } from '@/site-config'
+---
+
+<BaseLayout title='Projects' description={`Projects by ${siteConfig.author}`}>
+	<TitlePage title='Projects' />
+
+	<div class='prose prose-stone dark:prose-invert max-w-none'>
+		<section class='space-y-6'>
+			<p class='text-lg leading-relaxed'>
+				Here are some of the projects I've worked on. Each project represents a learning experience
+				and a step forward in my development journey.
+			</p>
+
+			<div class='space-y-8 mt-8'>
+				<!-- Project cards will go here -->
+				<p class='text-base text-stone-600 dark:text-stone-400 italic'>Projects coming soon...</p>
+			</div>
+		</section>
+	</div>
+</BaseLayout>
