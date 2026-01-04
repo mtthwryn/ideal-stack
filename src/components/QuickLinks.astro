@@ -1,0 +1,53 @@
+---
+import TagIcon from './icons/TagIcon.astro'
+---
+
+<section class='py-8'>
+	<h2 class='text-2xl font-bold text-stone-900 dark:text-white mb-6'>Quick Links</h2>
+	<div class='grid grid-cols-2 md:grid-cols-4 gap-4'>
+		<a
+			href='/about'
+			class='p-6 bg-white dark:bg-stone-900/40 border border-stone-200 dark:border-stone-800 rounded-xl hover:shadow-lg hover:border-stone-300 dark:hover:border-stone-700 transition-all duration-200 text-center group'
+		>
+			<div class='text-2xl mb-2'>👋</div>
+			<div
+				class='font-semibold text-stone-900 dark:text-white group-hover:text-stone-600 dark:group-hover:text-stone-300 transition-colors'
+			>
+				About
+			</div>
+		</a>
+		<a
+			href='/projects'
+			class='p-6 bg-white dark:bg-stone-900/40 border border-stone-200 dark:border-stone-800 rounded-xl hover:shadow-lg hover:border-stone-300 dark:hover:border-stone-700 transition-all duration-200 text-center group'
+		>
+			<div class='text-2xl mb-2'>💼</div>
+			<div
+				class='font-semibold text-stone-900 dark:text-white group-hover:text-stone-600 dark:group-hover:text-stone-300 transition-colors'
+			>
+				Projects
+			</div>
+		</a>
+		<a
+			href='/tags'
+			class='p-6 bg-white dark:bg-stone-900/40 border border-stone-200 dark:border-stone-800 rounded-xl hover:shadow-lg hover:border-stone-300 dark:hover:border-stone-700 transition-all duration-200 text-center group'
+		>
+			<div class='text-2xl mb-2'>🏷️</div>
+			<div
+				class='font-semibold text-stone-900 dark:text-white group-hover:text-stone-600 dark:group-hover:text-stone-300 transition-colors'
+			>
+				Tags
+			</div>
+		</a>
+		<a
+			href='/rss.xml'
+			class='p-6 bg-white dark:bg-stone-900/40 border border-stone-200 dark:border-stone-800 rounded-xl hover:shadow-lg hover:border-stone-300 dark:hover:border-stone-700 transition-all duration-200 text-center group'
+		>
+			<div class='text-2xl mb-2'>📡</div>
+			<div
+				class='font-semibold text-stone-900 dark:text-white group-hover:text-stone-600 dark:group-hover:text-stone-300 transition-colors'
+			>
+				RSS Feed
+			</div>
+		</a>
+	</div>
+</section>

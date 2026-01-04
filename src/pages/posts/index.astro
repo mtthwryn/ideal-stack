@@ -1,0 +1,29 @@
+---
+import { getPosts } from '@/utils'
+import { siteConfig } from '@/data/site.config'
+import BaseLayout from '@/layouts/BaseLayout'
+import ListPosts from '@/components/ListPosts'
+import ListCategories from '@/components/ListCategories'
+import TitlePage from '@/components/TitlePage'
+
+const allPosts = await getPosts()
+const posts = allPosts.slice(0, siteConfig.paginationSize)
+---
+
+<BaseLayout title='All Posts'>
+	<TitlePage title='All Posts' />
+	<ListCategories activeCategory='view-all' />
+	<ListPosts posts={posts} />
+	{
+		allPosts.length > siteConfig.paginationSize && (
+			<div class='mt-8 text-center'>
+				<a
+					href='/posts/2'
+					class='inline-block px-6 py-3 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-lg font-semibold hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors'
+				>
+					Next Page →
+				</a>
+			</div>
+		)
+	}
+</BaseLayout>

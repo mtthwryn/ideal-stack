@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout'
+import ListPosts from '@/components/ListPosts'
+import ListCategories from '@/components/ListCategories'
+import TitlePage from '@/components/TitlePage'
+import { getPosts } from '@/utils'
+import { siteConfig } from '@/data/site.config'
+import Pagination from '@/components/Pagination'
+
+export async function getStaticPaths({ paginate }: any) {
+	const allPosts = await getPosts()
+
+	return paginate(allPosts, {
+		params: {},
+		pageSize: siteConfig.paginationSize
+	})
+}
+
+const { page } = Astro.props
+const posts = page.data
+---
+
+<BaseLayout title='All Posts'>
+	<TitlePage title='All Posts' />
+	<ListCategories activeCategory='view-all' />
+	<ListPosts posts={posts} />
+	<Pagination page={page} />
+</BaseLayout>

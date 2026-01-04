@@ -1,0 +1,31 @@
+---
+import { getPosts, getCategories, getTags } from '@/utils'
+
+const allPosts = await getPosts()
+const categories = await getCategories()
+const tags = await getTags()
+
+const stats = [
+	{ label: 'Total Posts', value: allPosts.length, icon: '📝' },
+	{ label: 'Categories', value: categories.length, icon: '📂' },
+	{ label: 'Tags', value: tags.length, icon: '🏷️' }
+]
+---
+
+<section class='py-8 border-y border-stone-200 dark:border-stone-800'>
+	<div class='grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8'>
+		{
+			stats.map((stat) => (
+				<div class='text-center space-y-2'>
+					<div class='text-3xl mb-2'>{stat.icon}</div>
+					<div class='text-3xl md:text-4xl font-bold text-stone-900 dark:text-white'>
+						{stat.value}
+					</div>
+					<div class='text-sm md:text-base text-stone-600 dark:text-stone-400 font-medium'>
+						{stat.label}
+					</div>
+				</div>
+			))
+		}
+	</div>
+</section>

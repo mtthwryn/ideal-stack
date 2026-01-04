@@ -1,0 +1,41 @@
+---
+import { siteConfig } from '@/site-config'
+import { sluglify } from '@/utils'
+
+type Props = {
+	title?: string
+	subtitle?: string
+	showCTA?: boolean
+}
+
+const { title = siteConfig.title, subtitle = siteConfig.description, showCTA = true } = Astro.props
+---
+
+<section class='text-center space-y-6 py-8 md:py-12'>
+	<h1 class='text-4xl md:text-6xl font-extrabold tracking-tight text-stone-900 dark:text-white'>
+		{title}
+	</h1>
+	<p
+		class='text-lg md:text-xl text-stone-600 dark:text-stone-400 max-w-2xl mx-auto leading-relaxed'
+	>
+		{subtitle}
+	</p>
+	{
+		showCTA && (
+			<div class='flex flex-wrap justify-center gap-4 pt-4'>
+				<a
+					href='/tags'
+					class='px-6 py-3 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 rounded-lg font-semibold hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors duration-200'
+				>
+					Explore Posts
+				</a>
+				<a
+					href='/about'
+					class='px-6 py-3 border-2 border-stone-900 dark:border-stone-100 text-stone-900 dark:text-stone-100 rounded-lg font-semibold hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors duration-200'
+				>
+					About Me
+				</a>
+			</div>
+		)
+	}
+</section>
