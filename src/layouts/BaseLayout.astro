@@ -7,11 +7,21 @@ import ProviderAnimations from '@/components/ProviderAnimations'
 import TwSizeIndicator from '@/components/TwSizeIndicator'
 import EditBlog from '@/components/editBlog'
 import BackToTop from '@/components/BackToTop'
-const { title, description, image, articleDate, articleTitle, articleAuthor, articleTags } =
-	Astro.props
+import { siteConfig } from '@/site-config'
+const {
+	title,
+	description,
+	image,
+	articleDate,
+	articleTitle,
+	articleAuthor,
+	articleTags,
+	articleCategory,
+	breadcrumbs
+} = Astro.props
 ---
 
-<html lang='en' class='scroll-smooth'>
+<html lang={siteConfig.lang.split('-')[0]} class='scroll-smooth'>
 	<head>
 		<BaseHead
 			title={title}
@@ -21,6 +31,8 @@ const { title, description, image, articleDate, articleTitle, articleAuthor, art
 			articleTitle={articleTitle}
 			articleAuthor={articleAuthor}
 			articleTags={articleTags}
+			articleCategory={articleCategory}
+			breadcrumbs={breadcrumbs}
 		/>
 		<ProviderTheme />
 		<ProviderAnimations />

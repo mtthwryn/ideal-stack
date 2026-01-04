@@ -11,6 +11,8 @@ export interface Props {
 	articleTitle?: string | undefined
 	articleAuthor?: string | undefined
 	articleTags?: string[] | undefined
+	articleCategory?: string | undefined
+	breadcrumbs?: Array<{ name: string; url: string }> | undefined
 }
 
 const {
@@ -20,7 +22,9 @@ const {
 	articleDate,
 	articleTitle,
 	articleAuthor,
-	articleTags
+	articleTags,
+	articleCategory,
+	breadcrumbs
 } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : '/open-graph.png', Astro.url).href
@@ -28,6 +32,12 @@ const socialImageURL = new URL(ogImage ? ogImage : '/open-graph.png', Astro.url)
 const titleSeparator = '•'
 
 const siteTitle = `${title} ${titleSeparator} ${siteConfig.title}`
+
+// Generate keywords from tags and category
+const keywords =
+	articleTags && articleTags.length > 0
+		? [...articleTags, ...(articleCategory ? [articleCategory] : [])].join(', ')
+		: articleCategory || undefined
 
 // Schema.org structured data
 const organizationSchema = {
@@ -48,28 +58,56 @@ const articleSchema = articleDate
 			'@type': 'Article',
 			headline: articleTitle || title,
 			description: description,
-			image: socialImageURL,
+			image: {
+				'@type': 'ImageObject',
+				url: socialImageURL,
+				width: 1200,
+				height: 630
+			},
 			datePublished: articleDate,
 			dateModified: articleDate,
 			author: {
 				'@type': 'Person',
-				name: articleAuthor || siteConfig.author
+				name: articleAuthor || siteConfig.author,
+				url: siteConfig.site
 			},
 			publisher: {
 				'@type': 'Organization',
 				name: siteConfig.title,
-				url: siteConfig.site
+				url: siteConfig.site,
+				logo: {
+					'@type': 'ImageObject',
+					url: new URL('/open-graph.png', siteConfig.site).toString()
+				}
 			},
 			mainEntityOfPage: {
 				'@type': 'WebPage',
 				'@id': canonicalURL.toString()
 			},
+			...(articleCategory && {
+				articleSection: articleCategory
+			}),
 			...(articleTags &&
 				articleTags.length > 0 && {
 					keywords: articleTags.join(', ')
 				})
 		}
 	: null
+
+// Breadcrumb schema
+const breadcrumbSchema =
+	breadcrumbs && breadcrumbs.length > 0
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: breadcrumbs.map((crumb, index) => ({
+					'@type': 'ListItem',
+					position: index + 1,
+					name: crumb.name,
+					item: crumb.url
+				}))
+			}
+		: null
 
 const websiteSchema = {
 	'@context': 'https://schema.org',
@@ -80,6 +118,14 @@ const websiteSchema = {
 	author: {
 		'@type': 'Person',
 		name: siteConfig.author
+	},
+	potentialAction: {
+		'@type': 'SearchAction',
+		target: {
+			'@type': 'EntryPoint',
+			urlTemplate: `${siteConfig.site}?search={search_term_string}`
+		},
+		'query-input': 'required name=search_term_string'
 	}
 }
 
@@ -92,6 +138,8 @@ import { AstroFont } from 'astro-font'
 <meta name='viewport' content='width=device-width,initial-scale=1' />
 <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 <meta name='generator' content={Astro.generator} />
+<meta name='theme-color' content='#ffffff' media='(prefers-color-scheme: light)' />
+<meta name='theme-color' content='#0a0910' media='(prefers-color-scheme: dark)' />
 
 <!-- Canonical URL -->
 <link rel='canonical' href={canonicalURL} />
@@ -106,28 +154,44 @@ import { AstroFont } from 'astro-font'
 <meta name='title' content={siteTitle} />
 <meta name='description' content={description} />
 <meta name='author' content={siteConfig.author} />
+<meta name='language' content={siteConfig.lang} />
+<meta
+	name='robots'
+	content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+/>
+<meta name='googlebot' content='index, follow' />
+{keywords && <meta name='keywords' content={keywords} />}
 
 <!-- Open Graph / Facebook -->
 <meta property='og:type' content={articleDate ? 'article' : 'website'} />
-<meta property='og:url' content={Astro.url} />
+<meta property='og:url' content={canonicalURL} />
 <meta property='og:title' content={title} />
 <meta property='og:description' content={description} />
 <meta property='og:image' content={socialImageURL} />
+<meta property='og:image:width' content='1200' />
+<meta property='og:image:height' content='630' />
+<meta property='og:image:alt' content={title} />
+<meta property='og:site_name' content={siteConfig.title} />
+<meta property='og:locale' content={siteConfig.ogLocale} />
 {
 	articleDate && (
 		<>
 			<meta property='article:author' content={siteConfig.author} />
 			<meta property='article:published_time' content={articleDate} />
+			<meta property='article:modified_time' content={articleDate} />
+			{articleCategory && <meta property='article:section' content={articleCategory} />}
+			{articleTags && articleTags.map((tag) => <meta property='article:tag' content={tag} />)}
 		</>
 	)
 }
 
 <!-- Twitter -->
-<meta property='twitter:card' content='summary_large_image' />
-<meta property='twitter:url' content={Astro.url} />
-<meta property='twitter:title' content={title} />
-<meta property='twitter:description' content={description} />
-<meta property='twitter:image' content={socialImageURL} />
+<meta name='twitter:card' content='summary_large_image' />
+<meta name='twitter:url' content={canonicalURL} />
+<meta name='twitter:title' content={title} />
+<meta name='twitter:description' content={description} />
+<meta name='twitter:image' content={socialImageURL} />
+<meta name='twitter:image:alt' content={title} />
 
 <!-- RSS auto-discovery -->
 <link rel='alternate' type='application/rss+xml' title={siteConfig.title} href='/rss.xml' />
@@ -136,6 +200,11 @@ import { AstroFont } from 'astro-font'
 <script type='application/ld+json' set:html={JSON.stringify(organizationSchema)} />
 {articleSchema && <script type='application/ld+json' set:html={JSON.stringify(articleSchema)} />}
 {!articleDate && <script type='application/ld+json' set:html={JSON.stringify(websiteSchema)} />}
+{
+	breadcrumbSchema && (
+		<script type='application/ld+json' set:html={JSON.stringify(breadcrumbSchema)} />
+	)
+}
 
 <!-- Google tag (gtag.js) -->
 {

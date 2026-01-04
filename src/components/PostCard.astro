@@ -21,7 +21,8 @@ const {
 			height={200}
 			format='webp'
 			class='h-full min-w-full object-cover group-hover:scale-105 transition-transform duration-500'
-			alt={`img of ${title}`}
+			alt={`${title} - ${description || 'Blog post'}`}
+			loading='lazy'
 		/>
 
 		<div class='z-30 absolute bottom-0 w-full h-20'>
