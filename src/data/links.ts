@@ -10,7 +10,7 @@ export const SOCIALNETWORKS = [
 	},
 	{
 		name: 'LinkedIn',
-		url: 'https://linkedin.com/in/mtthwryn',
+		url: 'https://www.linkedin.com/in/matthew-ryan-teo',
 		icon: LinkedinIcon
 	}
 ] as const

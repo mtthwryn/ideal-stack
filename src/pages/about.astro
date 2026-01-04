@@ -2,27 +2,56 @@
 import TitlePage from '@/components/TitlePage'
 import BaseLayout from '@/layouts/BaseLayout'
 import { siteConfig } from '@/site-config'
+import { SOCIALNETWORKS } from '@/data/links'
+import GithubIcon from '@/components/icons/GithubIcon'
+import LinkedinIcon from '@/components/icons/LinkedinIcon'
 ---
 
 <BaseLayout title='About' description={`About ${siteConfig.author}`}>
 	<TitlePage title='About' />
 
 	<div class='prose prose-stone dark:prose-invert max-w-none'>
-		<section class='space-y-6'>
-			<p class='text-lg leading-relaxed'>
-				Welcome to my blog! I'm {siteConfig.author}, and I'm passionate about sharing knowledge,
-				experiences, and insights through writing.
-			</p>
+		<section class='space-y-12'>
+			<div class='space-y-6'>
+				<div class='space-y-4'>
+					<p class='text-xl leading-relaxed text-stone-700 dark:text-stone-300 font-medium'>
+						Welcome to my blog! I'm <span class='font-bold text-stone-900 dark:text-white'
+							>{siteConfig.author}</span
+						>, and I'm passionate about sharing knowledge, experiences, and insights through
+						writing.
+					</p>
 
-			<p class='text-lg leading-relaxed'>
-				This blog covers topics ranging from web development and technology to personal experiences
-				and thoughts. I hope you find the content here useful and engaging.
-			</p>
+					<p class='text-lg leading-relaxed text-stone-600 dark:text-stone-400'>
+						This blog covers topics ranging from web development and technology to personal
+						experiences and thoughts. I hope you find the content here useful and engaging.
+					</p>
 
-			<p class='text-lg leading-relaxed'>
-				Feel free to explore the posts, browse by categories or tags, and reach out if you'd like to
-				connect!
-			</p>
+					<p class='text-lg leading-relaxed text-stone-600 dark:text-stone-400'>
+						Feel free to explore the posts, browse by categories or tags, and reach out if you'd
+						like to connect!
+					</p>
+					<div class='space-y-8'>
+						<div class='flex flex-wrap gap-4'>
+							{
+								SOCIALNETWORKS.map((network) => (
+									<a
+										href={network.url}
+										target='_blank'
+										rel='noopener noreferrer'
+										class='group flex items-center gap-3 px-5 py-3 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-lg hover:bg-stone-200 dark:hover:bg-stone-700 transition-all duration-200 font-semibold hover:scale-105'
+										aria-label={network.name}
+									>
+										<span class='group-hover:scale-110 transition-transform duration-200'>
+											{network.name === 'Github' ? <GithubIcon /> : <LinkedinIcon />}
+										</span>
+										<span>{network.name}</span>
+									</a>
+								))
+							}
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</div>
 </BaseLayout>
