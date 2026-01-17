@@ -6,18 +6,13 @@ import TitlePage from '@/components/TitlePage'
 import BaseLayout from '@/layouts/BaseLayout'
 import { getPosts } from '@/utils'
 import { siteConfig } from '@/site-config'
+import PostCard from '@/components/PostCard'
 
 const MAX_POSTS = 6 // max number of posts to show on the home page
 const allPosts = await getPosts(MAX_POSTS)
-const featuredPost = allPosts[0]
-const latestPosts = allPosts.slice(1)
-
-// Get read time for featured post
-let featuredReadTime = '5 min read'
-if (featuredPost) {
-	const rendered = await featuredPost.render()
-	featuredReadTime = rendered.remarkPluginFrontmatter.minutesRead || '5 min read'
-}
+const FEATURED_COUNT = 3
+const featuredPosts = allPosts.slice(0, FEATURED_COUNT)
+const latestPosts = allPosts.slice(FEATURED_COUNT)
 ---
 
 <BaseLayout title='Home'>
@@ -27,11 +22,11 @@ if (featuredPost) {
 
 	<!-- Featured Post Section -->
 	{
-		featuredPost && (
-			<section class='py-8 space-y-6'>
+		featuredPosts.length > 0 && (
+			<section class='py-2 space-y-6'>
 				<div class='flex items-center justify-between'>
 					<h2 class='text-2xl md:text-3xl font-bold text-stone-900 dark:text-white'>
-						Featured Post
+						Featured Posts
 					</h2>
 					<a
 						href='/posts'
@@ -40,7 +35,21 @@ if (featuredPost) {
 						All Posts →
 					</a>
 				</div>
-				<FeaturedPost post={featuredPost} readTime={featuredReadTime} />
+				<div class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+					{await Promise.all(
+						featuredPosts.map(async (post) => {
+							const { remarkPluginFrontmatter } = await post.render()
+							return (
+								<PostCard
+									id={post.id}
+									data={post.data}
+									slug={post.slug}
+									readTime={remarkPluginFrontmatter.minutesRead}
+								/>
+							)
+						})
+					)}
+				</div>
 			</section>
 		)
 	}
@@ -48,7 +57,7 @@ if (featuredPost) {
 	<!-- Latest Posts Section -->
 	{
 		latestPosts.length > 0 && (
-			<section class='py-8 space-y-6'>
+			<section class='py-2 space-y-6'>
 				<div class='flex items-center justify-between'>
 					<h2 class='text-2xl md:text-3xl font-bold text-stone-900 dark:text-white'>
 						Latest Posts
