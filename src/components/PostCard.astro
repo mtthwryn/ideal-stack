@@ -2,10 +2,11 @@
 import { Image } from 'astro:assets'
 import FormattedDate from '@/components/FormattedDate'
 import ArrowUp from '@/components/icons/ArrowUp'
+import Tag from '@/components/Tag'
 
 const {
 	id,
-	data: { title, description, pubDate, heroImage, category },
+	data: { title, description, pubDate, heroImage, category, tags },
 	readTime,
 	slug
 } = Astro.props
@@ -27,13 +28,22 @@ const {
 			loading='lazy'
 		/>
 
-		<!-- Category Badge -->
-		<div class='absolute top-4 left-4 z-10'>
+		<!-- Category and Tag Badges -->
+		<div class='absolute top-4 left-4 z-10 flex flex-row flex-wrap gap-2 items-center'>
 			<span
-				class='inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold text-white'
+				class='inline-block px-3 py-1 bg-purple-600/60 backdrop-blur-sm font-semibold text-white dark:bg-purple-900/60 dark:text-white shadow text-sm rounded-full'
 			>
 				{category}
 			</span>
+			{
+				tags &&
+					tags.length > 0 &&
+					tags.map((tag: string) => (
+						<span class='inline-block px-3 py-1 bg-indigo-600/60 backdrop-blur-sm font-semibold text-white dark:bg-indigo-900/60 dark:text-white shadow text-sm rounded-full'>
+							{tag}
+						</span>
+					))
+			}
 		</div>
 
 		<div class='z-30 absolute bottom-0 w-full h-8 flex items-center justify-center'>
