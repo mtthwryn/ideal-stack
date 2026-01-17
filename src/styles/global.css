@@ -11,6 +11,11 @@
 		@apply text-base;
 	}
 
+	.prose code, .prose pre {
+		color: #222 !important;
+		background: #f5f5f5 !important;
+	}
+
 	/* prose styles here */
 	.prose h1,
 	h2,
