@@ -30,7 +30,7 @@ export default defineConfig({
 					{
 						type: 'image',
 						label: 'Cover Image',
-						required: true,
+						required: false,
 						name: 'heroImage',
 						description: 'The image used for the cover of the post'
 					},

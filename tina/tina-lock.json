@@ -12,7 +12,7 @@
 					{
 						"type": "image",
 						"label": "Cover Image",
-						"required": true,
+						"required": false,
 						"name": "heroImage",
 						"description": "The image used for the cover of the post",
 						"namespace": ["post", "heroImage"],
@@ -773,10 +773,7 @@
 						"kind": "FieldDefinition",
 						"name": { "kind": "Name", "value": "heroImage" },
 						"arguments": [],
-						"type": {
-							"kind": "NonNullType",
-							"type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }
-						}
+						"type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }
 					},
 					{
 						"kind": "FieldDefinition",
