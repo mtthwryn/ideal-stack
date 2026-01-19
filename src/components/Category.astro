@@ -22,9 +22,8 @@ const getHref = () => {
 <a
 	href={getHref()}
 	class={cn(
-		`text-gray-600 dark:text-gray-300  pb-2.5 first-letter:uppercase font-medium hover:text-gray-800 border-b-2 border-opacity-0 dark:border-opacity-0 border-black dark:border-white dark:hover:border-white hover:border-opacity-100 transition-colors duration-150 ease-linear  `,
-		isActive &&
-			`border-black border-b-2 text-black z-10  dark:border-white dark:text-white dark:border-opacity-100 border-opacity-100`
+		`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-150 ease-linear bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600`,
+		isActive && `bg-black text-white dark:bg-white dark:text-black`
 	)}
 >
 	{name}

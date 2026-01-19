@@ -18,6 +18,6 @@ export const siteConfig: SiteConfig = {
 	lang: 'en-GB',
 	ogLocale: 'en_GB',
 	shareMessage: 'Share this post', // Message to share a post on social media
-	paginationSize: 6, // Number of posts per page
+	paginationSize: 12, // Number of posts per page
 	googleAnalyticsId: import.meta.env.PUBLIC_GA_ID || undefined // Set via PUBLIC_GA_ID environment variable
 }
